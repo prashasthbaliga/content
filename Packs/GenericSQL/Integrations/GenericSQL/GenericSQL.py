@@ -151,15 +151,13 @@ class Client:
 def generate_default_port_by_dialect(dialect: str) -> str:
     """
     In case no port was chosen, a default port will be chosen according to the SQL db type. Only return a port for
-    Microsoft SQL Server where it seems to be required. For the other drivers an empty port is supported.
+    Microsoft SQL Server and ODBC Driver 17 for SQL Server where it seems to be required.
+    For the other drivers a None port is supported
     :param dialect: sql db type
     :return: default port needed for connection
     """
-    if dialect == "Microsoft SQL Server":
+    if dialect in {'Microsoft SQL Server', 'ODBC Driver 17 for SQL Server'}:
         return "1433"
-    else:
-        # use default port supported by the driver
-        return ""
 
 
 def generate_bind_vars(bind_variables_names: str, bind_variables_values: str) -> Any:

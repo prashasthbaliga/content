@@ -11,8 +11,8 @@ configuration:
   - MySQL
   - PostgreSQL
   - Microsoft SQL Server
-  - Oracle
   - Microsoft SQL Server - MS ODBC Driver
+  - Oracle
   required: true
   type: 15
 - display: Database host
