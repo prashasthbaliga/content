@@ -10,6 +10,7 @@ import hashlib
 import logging
 from sqlalchemy.sql import text
 from sqlalchemy.engine.url import URL
+from urllib.parse import parse_qsl
 try:
     # if integration is using an older image (4.5 Server) we don't have expiringdict
     from expiringdict import ExpiringDict  # pylint: disable=E0401
@@ -56,10 +57,9 @@ class Client:
         Returns:
             A dict with the keys and values.
         """
-        connect_parameters = connect_parameters or ''
-        pattern = re.compile(r'([^=&]+)=([^&]+)')
+        connect_parameters_tuple_list = parse_qsl(connect_parameters, keep_blank_values=True)
         connect_parameters_dict = dict()
-        for key, value in pattern.findall(connect_parameters):
+        for key, value in connect_parameters_tuple_list:
             connect_parameters_dict[key] = value
         if dialect == "Microsoft SQL Server":
             connect_parameters_dict['driver'] = 'FreeTDS'
@@ -148,7 +148,7 @@ class Client:
         return results, headers
 
 
-def generate_default_port_by_dialect(dialect: str) -> str:
+def generate_default_port_by_dialect(dialect: str) -> Optional[str]:
     """
     In case no port was chosen, a default port will be chosen according to the SQL db type. Only return a port for
     Microsoft SQL Server and ODBC Driver 17 for SQL Server where it seems to be required.
@@ -158,6 +158,7 @@ def generate_default_port_by_dialect(dialect: str) -> str:
     """
     if dialect in {'Microsoft SQL Server', 'ODBC Driver 17 for SQL Server'}:
         return "1433"
+    return None
 
 
 def generate_bind_vars(bind_variables_names: str, bind_variables_values: str) -> Any:
