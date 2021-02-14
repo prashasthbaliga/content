@@ -267,6 +267,12 @@ For example:
 service_name=XEXDB
 ```
 
+### Microsoft SQL Server
+The **Microsoft SQL Server** uses the FreeTDS driver to communicate with the Microsoft SQL Server using the TDS protocol.
+
+However, we've seen some issues with freetds which we couldn't resolve, and MS has an official driver supported for Linux - the **Microsoft SQL Server - MS ODBC Driver**
+
+In case you're experiencing any issues communicating with your Microsoft SQL Sever try using the **Microsoft SQL Server - MS ODBC Driver** instead.
 
 ## Possible Errors:
 * The bind variables lists are not is the same length
